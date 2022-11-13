@@ -1,2 +1,2 @@
 # OOP
-Problems from OOP classes.
+Problems from OOP classes. We learn basics of Java.
