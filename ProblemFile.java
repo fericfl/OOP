@@ -1,72 +1,62 @@
-class File { 
-    private String information;
-    private String name;
-
-    public File(String info, String n) {
-        information = info;
-        name = n;
-    }
-
-    public String getContent() {
-        return information + name;
-    }
-    
-    public String toString() {
-        return information;
-    }
-} 
-
-class Folder {
-    private File[] entries;
-    private static int index = 0;
-    private static int size;
-    private static int flag = 0;
-
-    public Folder(int s) {
-        size = s;
-        entries = new File[size];
-    }
-
-    public void getEntry(File file) {
-            if (index >= size) {
-                System.out.println("Cannot add any more elements!");
-            }
-            else {
-                flag = 1;
-                for (int i = 0; (i < index) && (flag != 0) ; i++) {
-                    if(entries[i] == file) {
-                        flag = 0;
-                        System.out.println("Element " + entries[i].toString() +  " is already added in the folder. Aborting action...");
-                    }
-                }
-                if(flag != 0){
-                    entries[index] = file;
-                    index++;
-                }
-            }
-        }
-
-    public void getContent() {
-        String aux = "";
-        for(int i = 0; i < index; i++) {
-            aux = aux + entries[i].getContent() + " || ";
-        }
-        System.out.println(aux);
-    }
-
+interface Item {
+    public String getContent();
 
 }
 
-class ProblemFile {
-    public static void main(String[] args) {
-        File f1 = new File("test1","Andrei");
-        File f2 = new File("test2","Alex");
-        File f3 = new File("test3","Andar");
+class File implements Item {   
+    private String information;
 
-        Folder f = new Folder(4);
-        f.getEntry(f1);
-        f.getEntry(f2);
-        f.getEntry(f3);
-        f.getContent();
+    public File(String information) {
+        this.information = information;
     }
+
+    public String getContent () {
+        return information;
+    }
+}
+
+class Folder implements Item {
+    private Item[] entries;
+    private String information = "";
+    private int count = 0;
+    private int size;
+
+    public Folder(int size) {
+        this.size = size;
+        entries = new Item[size];
+    }
+
+    public void addElement(Item element) {
+        if(count >= size)
+            System.out.println("Cannot add element " + element.getContent());
+        else {
+            entries[count] = element;
+            count++;
+        }
+    }
+    public String getContent() {
+        String aux = "";
+        for(int i = 0; i < count; i++) {
+            aux += entries[i].getContent() + " ";
+        }
+        return aux;
+    }
+}
+
+
+public class ProblemFile {
+    public static void main(String[] args) {
+        File file1 = new File("File1");
+        Folder folder1 = new Folder(2);
+        folder1.addElement(file1);
+        Folder folder2 = new Folder(2);
+        folder1.addElement(folder2);
+        File file2 = new File("File2");
+        folder2.addElement(file2);
+        File file3 = new File("File3");
+        folder2.addElement(file3);
+        Folder folder3 = new Folder(1);
+        folder2.addElement(folder3);
+        System.out.println(folder1.getContent());
+    }    
 }
